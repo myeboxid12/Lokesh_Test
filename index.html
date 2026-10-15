@@ -7,11 +7,13 @@
 <style>
   :root {
     --bg: #f7f5f0; --card: #ffffff; --img-bg: #f1eee7; --text: #1f1d1a; --muted: #6b665e; --border: #e4dfd5;
-    --mario: #d62828; --paw: #1d4ed8; --gd: #0f9d58;
+    --good: #15803d; --bad: #b91c1c;
+    --mario: #d62828; --paw: #1d4ed8; --gd: #0f9d58; --subzero: #0284c7; --meltdown: #ea580c; --world: #a16207;
   }
   @media (prefers-color-scheme: dark) {
-    :root { --bg: #16151a; --card: #211f26; --img-bg: #2b2931; --text: #f1eee8; --muted: #a39e94; --border: #34313b;
-            --mario: #f26b6b; --paw: #7aa2ff; --gd: #4fd18b; }
+    :root { --bg: #16151a; --card: #211f26; --img-bg: #e9e5dc; --text: #f1eee8; --muted: #a39e94; --border: #34313b;
+            --good: #4ade80; --bad: #f87171;
+            --mario: #f26b6b; --paw: #7aa2ff; --gd: #4fd18b; --subzero: #5cc8f5; --meltdown: #fb923c; --world: #facc15; }
   }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--bg); color: var(--text);
@@ -21,15 +23,15 @@
   .sub { margin: 0 0 20px; color: var(--muted); }
   nav { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
   nav a { padding: 6px 14px; border-radius: 999px; border: 1px solid var(--border); background: var(--card);
-          color: var(--text); text-decoration: none; font-weight: 600; font-size: .9rem; }
-  nav a[href="#mario"] { color: var(--mario); } nav a[href="#paw"] { color: var(--paw); } nav a[href="#gd"] { color: var(--gd); }
+          color: var(--accent); text-decoration: none; font-weight: 600; font-size: .9rem; }
   input[type=search] { width: 100%; padding: 12px 14px; font: inherit; color: var(--text);
          background: var(--card); border: 1px solid var(--border); border-radius: 10px; }
-  section { margin-top: 40px; scroll-margin-top: 16px; }
-  h2 { display: flex; align-items: baseline; gap: 10px; margin: 0 0 14px; font-size: 1.5rem; }
-  h2 .count { font-size: .9rem; font-weight: 500; color: var(--muted); }
-  section[data-accent] h2 { color: var(--accent); }
-  #mario { --accent: var(--mario); } #paw { --accent: var(--paw); } #gd { --accent: var(--gd); }
+  section { margin-top: 44px; scroll-margin-top: 16px; }
+  section > h2 { display: flex; align-items: baseline; gap: 10px; margin: 0 0 4px; font-size: 1.6rem; color: var(--accent); }
+  .count { font-size: .9rem; font-weight: 500; color: var(--muted); }
+  .intro { margin: 0 0 14px; color: var(--muted); font-size: .95rem; }
+  h3.group { display: flex; align-items: baseline; gap: 8px; margin: 22px 0 10px; font-size: 1.1rem; }
+  h3.group.good { color: var(--good); } h3.group.bad { color: var(--bad); }
   ul { list-style: none; margin: 0; padding: 0;
        display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
   li.card { background: var(--card); border: 1px solid var(--border); border-top: 4px solid var(--accent);
@@ -37,9 +39,10 @@
   .pic { height: 180px; background: var(--img-bg); display: flex; align-items: center; justify-content: center; padding: 12px; }
   .pic img { max-width: 100%; max-height: 100%; object-fit: contain; }
   .body { padding: 12px 14px 16px; }
-  .body h3 { margin: 0 0 4px; font-size: 1.1rem; }
+  .body h4 { margin: 0 0 4px; font-size: 1.1rem; }
   .tag { display: inline-block; font-size: .75rem; font-weight: 600; padding: 2px 8px; border-radius: 999px;
-         color: var(--accent); border: 1px solid var(--accent); margin-bottom: 8px; }
+         border: 1px solid currentColor; margin-bottom: 8px; }
+  .good .tag { color: var(--good); } .bad .tag { color: var(--bad); }
   .body p { margin: 0; font-size: .92rem; color: var(--muted); }
   .empty { color: var(--muted); font-style: italic; }
   footer { margin-top: 48px; font-size: .8rem; color: var(--muted); }
@@ -48,142 +51,202 @@
 <body>
 <main>
   <h1>Atharv's Favourite Characters</h1>
-  <p class="sub">Characters from Super Mario, PAW Patrol and Geometry Dash, and what each of them does.</p>
-  <nav>
-    <a href="#mario">Super Mario</a>
-    <a href="#paw">PAW Patrol</a>
-    <a href="#gd">Geometry Dash</a>
-  </nav>
+  <p class="sub">The good guys and the bad guys from Super Mario, PAW Patrol and Geometry Dash, and what each of them does.</p>
+  <nav id="nav"></nav>
   <input type="search" id="q" placeholder="Search characters…" aria-label="Search characters">
-
-  <section id="mario" data-accent>
-    <h2>Super Mario <span class="count"></span></h2>
-    <ul></ul>
-  </section>
-
-  <section id="paw" data-accent>
-    <h2>PAW Patrol <span class="count"></span></h2>
-    <ul></ul>
-  </section>
-
-  <section id="gd" data-accent>
-    <h2>Geometry Dash <span class="count"></span></h2>
-    <ul></ul>
-  </section>
-
+  <div id="sections"></div>
   <footer>Character images come from the Super Mario Wiki, the PAW Patrol Wiki and the Geometry Dash Wiki. All characters belong to their owners (Nintendo, Spin Master and RobTop Games).</footer>
 </main>
 
 <script>
-  // [name, image file, role, description]
-  const characters = {
-    mario: [
-      ["Mario", "mario", "Hero", "The brave plumber hero of the Mushroom Kingdom. He jumps on enemies, grabs power-ups like the Super Mushroom and Fire Flower, and rescues Princess Peach from Bowser."],
-      ["Luigi", "luigi", "Hero", "Mario's younger, taller twin brother in green. He jumps higher than Mario and is the star of Luigi's Mansion, where he bravely hunts ghosts even though he is scared of them."],
-      ["Princess Peach", "princess-peach", "Friend", "The kind ruler of the Mushroom Kingdom. Bowser often kidnaps her, but she is also a hero of her own, floating with her parasol and starring in her own adventures."],
-      ["Princess Daisy", "princess-daisy", "Friend", "The sporty, cheerful princess of Sarasaland and Peach's best friend. She races in Mario Kart and plays in the Mario sports games."],
-      ["Yoshi", "yoshi", "Friend", "Mario's friendly green dinosaur. Mario rides on his back, and Yoshi swallows enemies with his long tongue and turns them into eggs."],
-      ["Toad", "toad", "Friend", "Princess Peach's loyal mushroom attendant. He cheers Mario on, gives helpful tips and sometimes joins the adventure himself."],
-      ["Toadette", "toadette", "Friend", "Toad's cheerful pink friend with pigtails. With the Super Crown she turns into Peachette."],
-      ["Captain Toad", "captain-toad", "Friend", "The leader of the Toad Brigade and a treasure explorer with a headlamp and a big backpack. He can't jump, so he solves puzzle mazes instead."],
-      ["Rosalina", "rosalina", "Friend", "A calm, magical princess who watches over the cosmos from the Comet Observatory and takes care of little star creatures called Lumas."],
-      ["Donkey Kong", "donkey-kong", "Friend", "A super strong, banana-loving gorilla. He was the very first villain Mario faced back in 1981, but today he is a friend and a hero of his own games."],
-      ["Diddy Kong", "diddy-kong", "Friend", "Donkey Kong's little buddy in a red cap. He is fast and acrobatic, flies with a barrel jetpack and shoots peanuts from his popguns."],
-      ["Pauline", "pauline", "Friend", "The person Mario rescued in the original Donkey Kong. Today she is the singing mayor of New Donk City."],
-      ["Birdo", "birdo", "Friend", "A pink dinosaur with a big bow who shoots eggs from her snout. She started as a boss in Super Mario Bros. 2 and is now a friend and kart racer."],
-      ["Nabbit", "nabbit", "Thief", "A sneaky purple thief who grabs items and runs away. As a playable character, enemies can't hurt him."],
-      ["Bowser", "bowser", "Villain", "The fire-breathing King of the Koopas and Mario's biggest enemy. He keeps kidnapping Princess Peach and trying to take over the Mushroom Kingdom."],
-      ["Bowser Jr.", "bowser-jr", "Villain", "Bowser's son. He wears a bib with a scary mouth drawn on it, flies around in the Junior Clown Car and always tries to help his dad beat Mario."],
-      ["Kamek", "kamek", "Villain", "An old Magikoopa wizard who raised Bowser as a baby. He casts spells, like making enemies grow giant during boss fights."],
-      ["Wario", "wario", "Rival", "Mario's greedy, loud rival in yellow and purple. He loves money and garlic and stars in his own WarioWare games."],
-      ["Waluigi", "waluigi", "Rival", "Luigi's tall, sneaky rival and Wario's partner in mischief. He shows up in Mario Kart, Mario Party and the sports games."],
-      ["King Boo", "king-boo", "Villain", "The crowned leader of all the Boos and Luigi's arch-enemy in Luigi's Mansion. He likes trapping people inside paintings."],
-      ["Petey Piranha", "petey-piranha", "Boss", "A giant walking Piranha Plant boss. He flaps his leafy arms to fly and spits goop."],
-      ["Larry Koopa", "larry", "Koopaling", "The youngest of the seven Koopalings who lead Bowser's army. He has a blue mohawk and is a bit of a cheater."],
-      ["Morton Koopa Jr.", "morton", "Koopaling", "The biggest and strongest Koopaling. He has a star on his face, talks a lot and pounds the ground to shake the arena."],
-      ["Wendy O. Koopa", "wendy", "Koopaling", "The only girl Koopaling. She wears a pink bow, loves jewelry and throws bouncing candy rings in battle."],
-      ["Iggy Koopa", "iggy", "Koopaling", "A wild, energetic Koopaling with thick glasses and green hair who loves crazy inventions."],
-      ["Roy Koopa", "roy", "Koopaling", "The tough bully of the Koopalings. He wears pink sunglasses and loves to fight."],
-      ["Lemmy Koopa", "lemmy", "Koopaling", "The smallest Koopaling, with rainbow hair. He balances on a circus ball and throws bouncy balls at Mario."],
-      ["Ludwig von Koopa", "ludwig", "Koopaling", "The oldest and smartest Koopaling, with wild blue hair. He loves composing classical music."],
-      ["Koopa Troopa", "koopa-troopa", "Enemy", "Turtle soldiers in Bowser's army. Stomp one and it hides in its shell, which Mario can then kick at other enemies."],
-      ["Goomba", "goomba", "Enemy", "Walking mushroom enemies and the very first enemy in Super Mario Bros. One stomp is all it takes to beat them."],
-      ["Boo", "boo", "Enemy", "Shy ghosts. They cover their faces when you look at them and sneak up on you when you turn your back."],
-      ["Shy Guy", "shy-guy", "Enemy", "Small enemies in a robe and a white mask. Nobody knows what is under the mask."],
-      ["Lakitu", "lakitu", "Enemy", "A Koopa who rides a cloud and drops spiky Spiny eggs. In Mario Kart he is the friendly referee who fishes racers back onto the track."],
-      ["Dry Bones", "dry-bones", "Enemy", "Skeleton Koopas found in castles. When you stomp them they collapse into a pile of bones, then put themselves back together."]
-    ],
-    paw: [
-      ["Ryder", "ryder", "Leader", "A 10-year-old boy who leads the PAW Patrol. When someone needs help, he calls the pups on his PupPad and picks the right ones for the job. \"No job is too big, no pup is too small!\""],
-      ["Chase", "chase", "Police & Spy Pup", "A German Shepherd who is the police and spy pup. He directs traffic, uses his megaphone and tracks things with his super nose. \"Chase is on the case!\""],
-      ["Marshall", "marshall", "Fire & Medic Pup", "A Dalmatian who is the fire pup and medic. He puts out fires with his water cannons and helps hurt animals and people. He's a bit clumsy and very funny. \"I'm fired up!\""],
-      ["Skye", "skye", "Aviation Pup", "A brave Cockapoo who flies the PAW Patrol helicopter and rescues from the air with her wings and harness. \"This pup's gotta fly!\""],
-      ["Rocky", "rocky", "Recycling Pup", "A mixed-breed pup who recycles and fixes things using tools from his truck. He doesn't like getting wet. \"Don't lose it, reuse it!\""],
-      ["Rubble", "rubble", "Construction Pup", "An English Bulldog who is the construction pup. He digs, lifts and builds with his bulldozer. \"Rubble on the double!\""],
-      ["Zuma", "zuma", "Water Rescue Pup", "A Chocolate Labrador who is the water rescue pup. He drives a hovercraft and dives underwater with his scuba gear. \"Let's dive in!\""],
-      ["Everest", "everest", "Snow Rescue Pup", "A Siberian Husky who handles snow and mountain rescues on Jake's Mountain with her snowplow. \"Ice or snow, I'm ready to go!\""],
-      ["Tracker", "tracker", "Jungle Rescue Pup", "A Chihuahua with super hearing who handles jungle rescues. He lives in the jungle with his friend Carlos and speaks both English and Spanish."],
-      ["Rex", "rex", "Dino Rescue Pup", "A Bernese Mountain Dog from Dino Island who knows all about dinosaurs and can talk to them. He uses wheels to get around and helps on Dino Rescue missions."],
-      ["Liberty", "liberty", "City Pup", "A long-haired Dachshund from Adventure City. She helped the PAW Patrol in PAW Patrol: The Movie and became their newest street-smart team member."],
-      ["Robo-Dog", "robo-dog", "Driver", "Ryder's robot dog, built with Rocky's help. He drives the PAW Patroller and pilots the Air Patroller."],
-      ["Mayor Goodway", "mayor-goodway", "Friend", "The mayor of Adventure Bay. She often calls the PAW Patrol for help, usually because her pet chicken Chickaletta has wandered off."],
-      ["Chickaletta", "chickaletta", "Friend", "Mayor Goodway's pet chicken, who she carries in her purse. Chickaletta keeps wandering into trouble and needs rescuing."],
-      ["Mayor Humdinger", "mayor-humdinger", "Villain", "The mayor of Foggy Bottom and the PAW Patrol's main troublemaker. He cheats and makes mischief with his Kitten Catastrophe Crew."],
-      ["Katie", "katie", "Friend", "Runs Katie's Pet Parlor, where she grooms and takes care of the pups. She is one of Ryder's best friends."],
-      ["Cali", "cali", "Friend", "Katie's pet cat, who sometimes gets stuck in tricky places."],
-      ["Cap'n Turbot", "capn-turbot", "Friend", "A friendly marine biologist who sails his boat, the Flounder, to study sea animals. He often gets into trouble and needs rescuing."],
-      ["Francois Turbot", "francois-turbot", "Friend", "Cap'n Turbot's cousin and research partner who lives with him in the Seal Island lighthouse. He is a zoologist, artist and nature photographer with a thick French accent."],
-      ["Mr. Porter", "mr-porter", "Friend", "Owns a restaurant in Adventure Bay and is Alex's grandfather. He likes to fix things with lots of duct tape."],
-      ["Alex Porter", "alex-porter", "Friend", "Mr. Porter's young grandson. He loves the PAW Patrol and is always keen to join their adventures."],
-      ["Farmer Yumi", "farmer-yumi", "Friend", "A farmer who grows carrots, apples and pumpkins. She is married to Farmer Al and is good friends with Mayor Goodway."],
-      ["Farmer Al", "farmer-al", "Friend", "Runs Moo Juice Dairy Farm, where he takes care of cows and pigs. He is married to Farmer Yumi."],
-      ["Jake", "jake", "Friend", "An expert snowboarder who runs the snowboarding resort on Jake's Mountain and takes care of Everest."],
-      ["Carlos", "carlos", "Friend", "A 10-year-old boy from the jungle who is Ryder's pen pal. He takes care of Tracker and loves exploring and learning about animals."],
-      ["Danny X", "danny-x", "Friend", "A 10-year-old daredevil who calls himself \"Daring Danny X\". He does wild stunts on his trike and snowboard, which sometimes means the pups have to save him."],
-      ["Ace Sorensen", "ace-sorensen", "Friend", "A stunt pilot and Skye's hero. She flies a small plane named Amelia and can even walk on its wings."]
-    ],
-    gd: [
-      ["Cube", "cube", "Game Mode", "The main icon you play as. You tap to jump over spikes and onto blocks, all in time with the music."],
-      ["Ship", "ship", "Game Mode", "Hold to fly up and let go to drop down. You have to steer carefully through narrow tunnels."],
-      ["Ball", "ball", "Game Mode", "Rolls along the ground, and each tap flips gravity so it switches between the floor and the ceiling."],
-      ["UFO", "ufo", "Game Mode", "Each tap gives a small flappy jump in the air, a bit like Flappy Bird."],
-      ["Wave", "wave", "Game Mode", "Zigzags up while you hold and down when you let go. It's one of the trickiest modes."],
-      ["Robot", "robot", "Game Mode", "Jumps higher the longer you hold the button."],
-      ["Spider", "spider", "Game Mode", "Teleports instantly between the floor and the ceiling each time you tap."],
-      ["Swing", "swing", "Game Mode", "Flies through the air, and every tap flips which way gravity pulls it."],
-      ["The Shopkeeper", "the-shopkeeper", "Shop Keeper", "Runs the main Shop, where you spend mana orbs on new icons. Tap him too many times and his scary alter ego Zolguroth appears and kicks you out."],
-      ["Scratch", "scratch", "Shop Keeper", "Runs the Secret Shop in the Treasure Room. He sells the Master Emblem that opens the Chamber of Time."],
-      ["Potbor", "potbor", "Shop Keeper", "Runs the Community Shop, which sells icons designed by Geometry Dash players."],
-      ["The Mechanic", "the-mechanic", "Shop Keeper", "Runs the Mechanic shop, which sells ship fires, icon animations and the Music Customizer."],
-      ["Diamond Shopkeeper", "diamond-shopkeeper", "Shop Keeper", "Runs the Diamond Shop, where you trade diamond shards for icons and the Music Unlocker."],
-      ["Spooky", "spooky", "Vault Keeper", "The angry padlock guarding the Vault, which is hidden in the Settings menu. Type in secret codes and Spooky may give you rewards."],
-      ["The Keymaster", "the-keymaster", "Vault Keeper", "The mischievous padlock guarding the Vault of Secrets. He sometimes drops green hints to help you guess the secret codes."],
-      ["The Gatekeeper", "the-gatekeeper", "Vault Keeper", "A cat-shaped ring handle that guards the Chamber of Time and answers secret codes."],
-      ["The Wraith", "the-wraith", "Vault Keeper", "Guards the Secret Room. Enter the right codes and he hands out chests full of rewards."],
-      ["Demon Guardian", "demon-guardian", "Mystery", "A creature with glowing green eyes locked in a cell in the Basement. It asks you to find the keys that open its locks."]
-    ]
-  };
+  // Each character: [name, image (under images/), role, description]
+  const sections = [
+    {
+      id: "mario", title: "Super Mario",
+      good: [
+        ["Mario", "mario/mario", "Hero", "The brave plumber hero of the Mushroom Kingdom. He jumps on enemies, grabs power-ups like the Super Mushroom and Fire Flower, and rescues Princess Peach from Bowser."],
+        ["Luigi", "mario/luigi", "Hero", "Mario's younger, taller twin brother in green. He jumps higher than Mario and is the star of Luigi's Mansion, where he bravely hunts ghosts even though he is scared of them."],
+        ["Princess Peach", "mario/princess-peach", "Princess", "The kind ruler of the Mushroom Kingdom. Bowser often kidnaps her, but she is also a hero of her own, floating with her parasol and starring in her own adventures."],
+        ["Princess Daisy", "mario/princess-daisy", "Princess", "The sporty, cheerful princess of Sarasaland and Peach's best friend. She races in Mario Kart and plays in the Mario sports games."],
+        ["Yoshi", "mario/yoshi", "Friend", "Mario's friendly green dinosaur. Mario rides on his back, and Yoshi swallows enemies with his long tongue and turns them into eggs."],
+        ["Toad", "mario/toad", "Friend", "Princess Peach's loyal mushroom attendant. He cheers Mario on, gives helpful tips and sometimes joins the adventure himself."],
+        ["Toadette", "mario/toadette", "Friend", "Toad's cheerful pink friend with pigtails. With the Super Crown she turns into Peachette."],
+        ["Captain Toad", "mario/captain-toad", "Explorer", "The leader of the Toad Brigade and a treasure explorer with a headlamp and a big backpack. He can't jump, so he solves puzzle mazes instead."],
+        ["Rosalina", "mario/rosalina", "Princess", "A calm, magical princess who watches over the cosmos from the Comet Observatory and takes care of little star creatures called Lumas."],
+        ["Donkey Kong", "mario/donkey-kong", "Friend", "A super strong, banana-loving gorilla. He was the very first villain Mario faced back in 1981, but today he is a friend and a hero of his own games."],
+        ["Diddy Kong", "mario/diddy-kong", "Friend", "Donkey Kong's little buddy in a red cap. He is fast and acrobatic, flies with a barrel jetpack and shoots peanuts from his popguns."],
+        ["Pauline", "mario/pauline", "Friend", "The person Mario rescued in the original Donkey Kong. Today she is the singing mayor of New Donk City."],
+        ["Birdo", "mario/birdo", "Friend", "A pink dinosaur with a big bow who shoots eggs from her snout. She started as a boss in Super Mario Bros. 2 and is now a friend and kart racer."]
+      ],
+      bad: [
+        ["Bowser", "mario/bowser", "Main Villain", "The fire-breathing King of the Koopas and Mario's biggest enemy. He keeps kidnapping Princess Peach and trying to take over the Mushroom Kingdom."],
+        ["Bowser Jr.", "mario/bowser-jr", "Villain", "Bowser's son. He wears a bib with a scary mouth drawn on it, flies around in the Junior Clown Car and always tries to help his dad beat Mario."],
+        ["Kamek", "mario/kamek", "Villain", "An old Magikoopa wizard who raised Bowser as a baby. He casts spells, like making enemies grow giant during boss fights."],
+        ["King Boo", "mario/king-boo", "Villain", "The crowned leader of all the Boos and Luigi's arch-enemy in Luigi's Mansion. He likes trapping people inside paintings."],
+        ["Wario", "mario/wario", "Rival", "Mario's greedy, loud rival in yellow and purple. He loves money and garlic and stars in his own WarioWare games."],
+        ["Waluigi", "mario/waluigi", "Rival", "Luigi's tall, sneaky rival and Wario's partner in mischief. He shows up in Mario Kart, Mario Party and the sports games."],
+        ["Nabbit", "mario/nabbit", "Thief", "A sneaky purple thief who grabs items and runs away. As a playable character, enemies can't hurt him."],
+        ["Petey Piranha", "mario/petey-piranha", "Boss", "A giant walking Piranha Plant boss. He flaps his leafy arms to fly and spits goop."],
+        ["Larry Koopa", "mario/larry", "Koopaling", "The youngest of the seven Koopalings who lead Bowser's army. He has a blue mohawk and is a bit of a cheater."],
+        ["Morton Koopa Jr.", "mario/morton", "Koopaling", "The biggest and strongest Koopaling. He has a star on his face, talks a lot and pounds the ground to shake the arena."],
+        ["Wendy O. Koopa", "mario/wendy", "Koopaling", "The only girl Koopaling. She wears a pink bow, loves jewelry and throws bouncing candy rings in battle."],
+        ["Iggy Koopa", "mario/iggy", "Koopaling", "A wild, energetic Koopaling with thick glasses and green hair who loves crazy inventions."],
+        ["Roy Koopa", "mario/roy", "Koopaling", "The tough bully of the Koopalings. He wears pink sunglasses and loves to fight."],
+        ["Lemmy Koopa", "mario/lemmy", "Koopaling", "The smallest Koopaling, with rainbow hair. He balances on a circus ball and throws bouncy balls at Mario."],
+        ["Ludwig von Koopa", "mario/ludwig", "Koopaling", "The oldest and smartest Koopaling, with wild blue hair. He loves composing classical music."],
+        ["Koopa Troopa", "mario/koopa-troopa", "Enemy", "Turtle soldiers in Bowser's army. Stomp one and it hides in its shell, which Mario can then kick at other enemies."],
+        ["Goomba", "mario/goomba", "Enemy", "Walking mushroom enemies and the very first enemy in Super Mario Bros. One stomp is all it takes to beat them."],
+        ["Boo", "mario/boo", "Enemy", "Shy ghosts. They cover their faces when you look at them and sneak up on you when you turn your back."],
+        ["Shy Guy", "mario/shy-guy", "Enemy", "Small enemies in a robe and a white mask. Nobody knows what is under the mask."],
+        ["Lakitu", "mario/lakitu", "Enemy", "A Koopa who rides a cloud and drops spiky Spiny eggs. In Mario Kart he is the friendly referee who fishes racers back onto the track."],
+        ["Dry Bones", "mario/dry-bones", "Enemy", "Skeleton Koopas found in castles. When you stomp them they collapse into a pile of bones, then put themselves back together."]
+      ]
+    },
+    {
+      id: "paw", title: "PAW Patrol",
+      good: [
+        ["Ryder", "paw/ryder", "Leader", "A 10-year-old boy who leads the PAW Patrol. When someone needs help, he calls the pups on his PupPad and picks the right ones for the job. \"No job is too big, no pup is too small!\""],
+        ["Chase", "paw/chase", "Police & Spy Pup", "A German Shepherd who is the police and spy pup. He directs traffic, uses his megaphone and tracks things with his super nose. \"Chase is on the case!\""],
+        ["Marshall", "paw/marshall", "Fire & Medic Pup", "A Dalmatian who is the fire pup and medic. He puts out fires with his water cannons and helps hurt animals and people. He's a bit clumsy and very funny. \"I'm fired up!\""],
+        ["Skye", "paw/skye", "Aviation Pup", "A brave Cockapoo who flies the PAW Patrol helicopter and rescues from the air with her wings and harness. \"This pup's gotta fly!\""],
+        ["Rocky", "paw/rocky", "Recycling Pup", "A mixed-breed pup who recycles and fixes things using tools from his truck. He doesn't like getting wet. \"Don't lose it, reuse it!\""],
+        ["Rubble", "paw/rubble", "Construction Pup", "An English Bulldog who is the construction pup. He digs, lifts and builds with his bulldozer. \"Rubble on the double!\""],
+        ["Zuma", "paw/zuma", "Water Rescue Pup", "A Chocolate Labrador who is the water rescue pup. He drives a hovercraft and dives underwater with his scuba gear. \"Let's dive in!\""],
+        ["Everest", "paw/everest", "Snow Rescue Pup", "A Siberian Husky who handles snow and mountain rescues on Jake's Mountain with her snowplow. \"Ice or snow, I'm ready to go!\""],
+        ["Tracker", "paw/tracker", "Jungle Rescue Pup", "A Chihuahua with super hearing who handles jungle rescues. He lives in the jungle with his friend Carlos and speaks both English and Spanish."],
+        ["Rex", "paw/rex", "Dino Rescue Pup", "A Bernese Mountain Dog from Dino Island who knows all about dinosaurs and can talk to them. He uses wheels to get around and helps on Dino Rescue missions."],
+        ["Liberty", "paw/liberty", "City Pup", "A long-haired Dachshund from Adventure City. She helped the PAW Patrol in PAW Patrol: The Movie and became their newest street-smart team member."],
+        ["Robo-Dog", "paw/robo-dog", "Driver", "Ryder's robot dog, built with Rocky's help. He drives the PAW Patroller and pilots the Air Patroller."],
+        ["Mayor Goodway", "paw/mayor-goodway", "Friend", "The mayor of Adventure Bay. She often calls the PAW Patrol for help, usually because her pet chicken Chickaletta has wandered off."],
+        ["Chickaletta", "paw/chickaletta", "Friend", "Mayor Goodway's pet chicken, who she carries in her purse. Chickaletta keeps wandering into trouble and needs rescuing."],
+        ["Katie", "paw/katie", "Friend", "Runs Katie's Pet Parlor, where she grooms and takes care of the pups. She is one of Ryder's best friends."],
+        ["Cali", "paw/cali", "Friend", "Katie's pet cat, who sometimes gets stuck in tricky places."],
+        ["Cap'n Turbot", "paw/capn-turbot", "Friend", "A friendly marine biologist who sails his boat, the Flounder, to study sea animals. He often gets into trouble and needs rescuing."],
+        ["Francois Turbot", "paw/francois-turbot", "Friend", "Cap'n Turbot's cousin and research partner who lives with him in the Seal Island lighthouse. He is a zoologist, artist and nature photographer with a thick French accent."],
+        ["Mr. Porter", "paw/mr-porter", "Friend", "Owns a restaurant in Adventure Bay and is Alex's grandfather. He likes to fix things with lots of duct tape."],
+        ["Alex Porter", "paw/alex-porter", "Friend", "Mr. Porter's young grandson. He loves the PAW Patrol and is always keen to join their adventures."],
+        ["Farmer Yumi", "paw/farmer-yumi", "Friend", "A farmer who grows carrots, apples and pumpkins. She is married to Farmer Al and is good friends with Mayor Goodway."],
+        ["Farmer Al", "paw/farmer-al", "Friend", "Runs Moo Juice Dairy Farm, where he takes care of cows and pigs. He is married to Farmer Yumi."],
+        ["Jake", "paw/jake", "Friend", "An expert snowboarder who runs the snowboarding resort on Jake's Mountain and takes care of Everest."],
+        ["Carlos", "paw/carlos", "Friend", "A 10-year-old boy from the jungle who is Ryder's pen pal. He takes care of Tracker and loves exploring and learning about animals."],
+        ["Danny X", "paw/danny-x", "Friend", "A 10-year-old daredevil who calls himself \"Daring Danny X\". He does wild stunts on his trike and snowboard, which sometimes means the pups have to save him."],
+        ["Ace Sorensen", "paw/ace-sorensen", "Friend", "A stunt pilot and Skye's hero. She flies a small plane named Amelia and can even walk on its wings."]
+      ],
+      bad: [
+        ["Mayor Humdinger", "paw/mayor-humdinger", "Main Villain", "The mayor of Foggy Bottom and the PAW Patrol's biggest troublemaker. He cheats, makes mischief and is always trying to beat Adventure Bay."],
+        ["Kitten Catastrophe Crew", "paw/kitten-catastrophe-crew", "Villains", "Mayor Humdinger's gang of mischievous kittens from Foggy Bottom. They do his sneaky jobs, but sometimes they disobey or even outsmart him."],
+        ["Harold Humdinger", "paw/harold-humdinger", "Villain", "Mayor Humdinger's clever nephew who builds big machines that don't always work. He is one of the villains in Mighty Pups."],
+        ["Victoria Vance", "paw/victoria-vance", "Villain", "A meteor-obsessed mad scientist who teamed up with Mayor Humdinger to take the pups' superpowers in PAW Patrol: The Mighty Movie."],
+        ["Ladybird", "paw/ladybird", "Thief", "A greedy thief who snatches things with a bird-shaped stick. She is one of the villains in Mighty Pups."],
+        ["The Copycat", "paw/the-copycat", "Villain", "Hailey Daily's pet cat, Mr. Nibbles. He got superpowers from a chunk of the meteor and became one of the villains in Mighty Pups."],
+        ["Sid Swashbuckle", "paw/sid-swashbuckle", "Pirate", "A young pirate captain who causes trouble at sea. He is the main villain of the Sea Patrol episodes."],
+        ["Arrby", "paw/arrby", "Pirate Pup", "Sid Swashbuckle's pet Dachshund and pirate first mate. Every now and then he helps the PAW Patrol instead."],
+        ["Sweetie", "paw/sweetie", "Villain", "The royal pup of the Princess of Barkingburg, a West Highland White Terrier. She is the main villain of the Mission PAW episodes and keeps trying to take over the kingdom."],
+        ["Claw", "paw/claw", "Villain", "A Doberman who was once training to be Barkingburg's greatest knight, until he broke the most important law: \"Never disturb a dragon\". He is a villain in Rescue Knights."],
+        ["Duke of Flappington", "paw/duke-of-flappington", "Villain", "The Princess of Barkingburg's bird-crazy cousin who loves eagles. He causes trouble in Jet to the Rescue and Rescue Knights."]
+      ]
+    },
+    {
+      id: "gd", title: "Geometry Dash",
+      good: [
+        ["Cube", "gd/cube", "Game Mode", "The main icon you play as. You tap to jump over spikes and onto blocks, all in time with the music."],
+        ["Ship", "gd/ship", "Game Mode", "Hold to fly up and let go to drop down. You have to steer carefully through narrow tunnels."],
+        ["Ball", "gd/ball", "Game Mode", "Rolls along the ground, and each tap flips gravity so it switches between the floor and the ceiling."],
+        ["UFO", "gd/ufo", "Game Mode", "Each tap gives a small flappy jump in the air, a bit like Flappy Bird."],
+        ["Wave", "gd/wave", "Game Mode", "Zigzags up while you hold and down when you let go. It's one of the trickiest modes."],
+        ["Robot", "gd/robot", "Game Mode", "Jumps higher the longer you hold the button."],
+        ["Spider", "gd/spider", "Game Mode", "Teleports instantly between the floor and the ceiling each time you tap."],
+        ["Swing", "gd/swing", "Game Mode", "Flies through the air, and every tap flips which way gravity pulls it."],
+        ["The Shopkeeper", "gd/the-shopkeeper", "Shop Keeper", "Runs the main Shop, where you spend mana orbs on new icons. Tap him too many times and his scary alter ego Zolguroth appears and kicks you out."],
+        ["Scratch", "gd/scratch", "Shop Keeper", "Runs the Secret Shop in the Treasure Room. He sells the Master Emblem that opens the Chamber of Time."],
+        ["Potbor", "gd/potbor", "Shop Keeper", "Runs the Community Shop, which sells icons designed by Geometry Dash players."],
+        ["The Mechanic", "gd/the-mechanic", "Shop Keeper", "Runs the Mechanic shop, which sells ship fires, icon animations and the Music Customizer."],
+        ["Diamond Shopkeeper", "gd/diamond-shopkeeper", "Shop Keeper", "Runs the Diamond Shop, where you trade diamond shards for icons and the Music Unlocker."],
+        ["Spooky", "gd/spooky", "Vault Keeper", "The angry padlock guarding the Vault, which is hidden in the Settings menu. Type in secret codes and Spooky may give you rewards."],
+        ["The Keymaster", "gd/the-keymaster", "Vault Keeper", "The mischievous padlock guarding the Vault of Secrets. He sometimes drops green hints to help you guess the secret codes."],
+        ["The Gatekeeper", "gd/the-gatekeeper", "Vault Keeper", "A cat-shaped ring handle that guards the Chamber of Time and answers secret codes."],
+        ["The Wraith", "gd/the-wraith", "Vault Keeper", "Guards the Secret Room. Enter the right codes and he hands out chests full of rewards."]
+      ],
+      bad: [
+        ["Demon Guardian", "gd/demon-guardian", "Mystery Monster", "A creature with glowing green eyes locked in a cell in the Basement. It asks you to find the keys that open its locks."],
+        ["Spikes", "gd/spikes", "Hazard", "The most common danger in Geometry Dash. Touch one and you crash and have to start the level again."],
+        ["Saw Blade", "gd/saw-blade", "Hazard", "A spinning blade that smashes your icon if you touch it."],
+        ["Chomper Monster", "gd/chomper-monster", "Monster", "A big black monster with one eye and jagged teeth that moves in some levels. Touch it and you crash."],
+        ["Bat Monster", "gd/bat-monster", "Monster", "A flapping, bat-winged monster with sharp teeth. It's one of the animated hazards in the game."],
+        ["Fireball", "gd/fireball", "Hazard", "A blazing fireball that flies through some levels. Keep away from it!"]
+      ]
+    },
+    {
+      id: "subzero", title: "Geometry Dash SubZero",
+      intro: "A free spin-off game from 2017 with three icy levels: Press Start, Nock Em and Power Trip.",
+      good: [
+        ["SubZero Cube", "gdspin/subzero", "Hero", "The icon you play as in SubZero. It races through three icy levels, and anything you unlock can be moved to the full game with a user account."]
+      ],
+      bad: [
+        ["Pixel Skull", "gdspin/pixel-skull", "Boss", "A giant pixel skull in Press Start. It chases your icon trying to eat it, then turns around for a boss fight and fires three blasts from its mouth."]
+      ]
+    },
+    {
+      id: "meltdown", title: "Geometry Dash Meltdown",
+      intro: "A free spin-off game from 2015 with three fiery levels: The Seven Seas, Viking Arena and Airborne Robots.",
+      good: [
+        ["Meltdown Cube", "gdspin/meltdown", "Hero", "The icon you play as in Meltdown. It dashes through three fiery levels, from easy to hard."]
+      ],
+      bad: [
+        ["Viking Arena Chompers", "gdspin/viking-arena-chompers", "Monsters", "A horde of glowing lava monsters that chase your icon from above and behind in Viking Arena. They snap their jaws but never quite reach you."],
+        ["Airborne Robots Monster", "gdspin/airborne-robots-monster", "Monster", "Shadowy monsters with jagged teeth hiding among the icy spikes in Airborne Robots."]
+      ]
+    },
+    {
+      id: "world", title: "Geometry Dash World",
+      intro: "A free spin-off game from 2016 with 10 short levels across two worlds, Dashlands and Toxic Factory.",
+      good: [
+        ["World Cube", "gdspin/world", "Hero", "The icon you play as in World. It plays the 10 levels in order, then can try levels made by other players."],
+        ["The Shopkeeper", "gd/the-shopkeeper", "Shop Keeper", "He runs the Shop in World too. In World you can also watch ads on his TV to earn mana orbs."],
+        ["Spooky", "gd/spooky", "Vault Keeper", "The grumpy padlock that guards the Vault in World too. Type secret codes to unlock rewards."]
+      ],
+      bad: [
+        ["Beast Mode Chomper", "gdspin/beast-mode-chomper", "Monster", "A shadow monster that pops out of a pit to chomp at your icon in Beast Mode, in the Dashlands world."]
+      ]
+    }
+  ];
 
   const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  const cards = (list, kind) => list.map(([name, img, role, desc]) => `
+    <li class="card ${kind}">
+      <div class="pic"><img src="images/${img}.png" alt="${esc(name)}" loading="lazy"></div>
+      <div class="body">
+        <h4>${esc(name)}</h4>
+        <span class="tag">${esc(role)}</span>
+        <p>${esc(desc)}</p>
+      </div>
+    </li>`).join("");
+
+  document.getElementById("nav").innerHTML = sections
+    .map(s => `<a href="#${s.id}" style="--accent: var(--${s.id})">${s.title}</a>`).join("");
+  document.getElementById("sections").innerHTML = sections.map(s => `
+    <section id="${s.id}" style="--accent: var(--${s.id})">
+      <h2>${s.title} <span class="count"></span></h2>
+      ${s.intro ? `<p class="intro">${s.intro}</p>` : ""}
+      <h3 class="group good">Good characters <span class="count" data-kind="good"></span></h3>
+      <ul data-kind="good"></ul>
+      <h3 class="group bad">Bad characters &amp; enemies <span class="count" data-kind="bad"></span></h3>
+      <ul data-kind="bad"></ul>
+    </section>`).join("");
 
   function render(query) {
     const q = query.trim().toLowerCase();
-    for (const [id, list] of Object.entries(characters)) {
-      const section = document.getElementById(id);
-      const matches = list.filter(([name, , role, desc]) =>
-        (name + " " + role + " " + desc).toLowerCase().includes(q));
-      section.querySelector(".count").textContent = matches.length + " of " + list.length;
-      section.querySelector("ul").innerHTML = matches.length
-        ? matches.map(([name, img, role, desc]) => `
-            <li class="card">
-              <div class="pic"><img src="images/${id}/${img}.png" alt="${esc(name)}" loading="lazy"></div>
-              <div class="body">
-                <h3>${esc(name)}</h3>
-                <span class="tag">${esc(role)}</span>
-                <p>${esc(desc)}</p>
-              </div>
-            </li>`).join("")
-        : `<li class="empty">No matches</li>`;
+    const match = ([name, , role, desc]) => (name + " " + role + " " + desc).toLowerCase().includes(q);
+    for (const s of sections) {
+      const el = document.getElementById(s.id);
+      let shown = 0;
+      for (const kind of ["good", "bad"]) {
+        const hits = s[kind].filter(match);
+        shown += hits.length;
+        el.querySelector(`.count[data-kind="${kind}"]`).textContent = hits.length + " of " + s[kind].length;
+        el.querySelector(`ul[data-kind="${kind}"]`).innerHTML = hits.length ? cards(hits, kind) : `<li class="empty">No matches</li>`;
+      }
+      el.querySelector("h2 .count").textContent = shown + " of " + (s.good.length + s.bad.length);
     }
   }
 
