@@ -7,12 +7,12 @@
 <style>
   :root {
     --bg: #f7f5f0; --card: #ffffff; --img-bg: #f1eee7; --text: #1f1d1a; --muted: #6b665e; --border: #e4dfd5;
-    --good: #15803d; --bad: #b91c1c; --img-bg-soft: #f1eee7;
+    --good: #15803d; --bad: #b91c1c; --power: #b45309; --img-bg-soft: #f1eee7;
     --mario: #d62828; --paw: #1d4ed8; --gd: #0f9d58; --subzero: #0284c7; --meltdown: #ea580c; --world: #a16207;
   }
   @media (prefers-color-scheme: dark) {
     :root { --bg: #16151a; --card: #211f26; --img-bg: #e9e5dc; --text: #f1eee8; --muted: #a39e94; --border: #34313b;
-            --good: #4ade80; --bad: #f87171; --img-bg-soft: #2b2931;
+            --good: #4ade80; --bad: #f87171; --power: #fbbf24; --img-bg-soft: #2b2931;
             --mario: #f26b6b; --paw: #7aa2ff; --gd: #4fd18b; --subzero: #5cc8f5; --meltdown: #fb923c; --world: #facc15; }
   }
   * { box-sizing: border-box; }
@@ -37,7 +37,7 @@
   aside summary .n { font-size: .75rem; font-weight: 500; color: var(--muted); }
   aside summary:hover, aside a:hover { background: var(--img-bg-soft); }
   aside .kind { margin: 8px 0 2px 26px; font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
-  aside .kind.good { color: var(--good); } aside .kind.bad { color: var(--bad); }
+  aside .kind.good { color: var(--good); } aside .kind.bad { color: var(--bad); } aside .kind.power { color: var(--power); }
   aside ul { display: block; margin: 0 0 6px; }
   aside a { display: block; padding: 3px 8px 3px 26px; border-radius: 6px; color: var(--text);
             text-decoration: none; font-size: .9rem; }
@@ -64,7 +64,7 @@
   .count { font-size: .9rem; font-weight: 500; color: var(--muted); }
   .intro { margin: 0 0 14px; color: var(--muted); font-size: .95rem; }
   h3.group { display: flex; align-items: baseline; gap: 8px; margin: 22px 0 10px; font-size: 1.1rem; }
-  h3.group.good { color: var(--good); } h3.group.bad { color: var(--bad); }
+  h3.group.good { color: var(--good); } h3.group.bad { color: var(--bad); } h3.group.power { color: var(--power); }
   ul { list-style: none; margin: 0; padding: 0;
        display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
   li.card { background: var(--card); border: 1px solid var(--border); border-top: 4px solid var(--accent);
@@ -75,7 +75,7 @@
   .body h4 { margin: 0 0 4px; font-size: 1.1rem; }
   .tag { display: inline-block; font-size: .75rem; font-weight: 600; padding: 2px 8px; border-radius: 999px;
          border: 1px solid currentColor; margin-bottom: 8px; }
-  .good .tag { color: var(--good); } .bad .tag { color: var(--bad); }
+  .good .tag { color: var(--good); } .bad .tag { color: var(--bad); } .power .tag { color: var(--power); }
   .body p { margin: 0; font-size: .92rem; color: var(--muted); }
   .empty { color: var(--muted); font-style: italic; }
   footer { margin-top: 48px; font-size: .8rem; color: var(--muted); }
@@ -90,7 +90,7 @@
 <main>
   <button class="menu-btn" id="menu-btn" aria-controls="sidebar" aria-expanded="false">☰ Comic characters</button>
   <h1>Atharv's Favourite Characters</h1>
-  <p class="sub">The good guys and the bad guys from Super Mario, PAW Patrol and Geometry Dash, and what each of them does.</p>
+  <p class="sub">The good guys, the bad guys and the power-ups from Super Mario, PAW Patrol and Geometry Dash, and what each of them does.</p>
   <input type="search" id="q" placeholder="Search characters…" aria-label="Search characters">
   <div id="sections"></div>
   <footer>Character images come from the Super Mario Wiki, the PAW Patrol Wiki and the Geometry Dash Wiki. All characters belong to their owners (Nintendo, Spin Master and RobTop Games).</footer>
@@ -141,6 +141,44 @@
         ["Shy Guy", "mario/shy-guy", "Enemy", "Small enemies in a robe and a white mask. Nobody knows what is under the mask."],
         ["Lakitu", "mario/lakitu", "Enemy", "A Koopa who rides a cloud and drops spiky Spiny eggs. In Mario Kart he is the friendly referee who fishes racers back onto the track."],
         ["Dry Bones", "mario/dry-bones", "Enemy", "Skeleton Koopas found in castles. When you stomp them they collapse into a pile of bones, then put themselves back together."]
+      ],
+      power: [
+        ["Super Mushroom", "mario-power/super-mushroom", "Super Mario Bros.", "The most famous power-up of all. It makes Mario grow into Super Mario, so he can break bricks and survive an extra hit."],
+        ["Fire Flower", "mario-power/fire-flower", "Super Mario Bros.", "Turns Mario into Fire Mario, who throws bouncing fireballs that defeat enemies and melt ice."],
+        ["Super Star", "mario-power/super-star", "Super Mario Bros.", "Makes you flash with rainbow colours and become invincible for a short time. Just run into enemies to knock them out!"],
+        ["1-Up Mushroom", "mario-power/1-up-mushroom", "Super Mario Bros.", "A green mushroom that gives you one extra life. It's usually the rarest mushroom."],
+        ["Superball Flower", "mario-power/superball-flower", "Super Mario Land", "Lets Mario shoot Superballs that bounce off walls and knock out enemies."],
+        ["Super Leaf", "mario-power/super-leaf", "Super Mario Bros. 3", "Gives Mario raccoon ears and a tail. He can whack enemies with his tail and fly after a running start."],
+        ["Tanooki Suit", "mario-power/tanooki-suit", "Super Mario Bros. 3", "A furry tanooki costume with all the raccoon powers, plus the trick of turning into a stone statue."],
+        ["Frog Suit", "mario-power/frog-suit", "Super Mario Bros. 3", "Makes Mario jump higher and swim faster against strong water currents, but he can only hop on land."],
+        ["Hammer Suit", "mario-power/hammer-suit", "Super Mario Bros. 3", "Lets Mario throw hammers like a Hammer Bro. They can defeat almost anything, even Bowser."],
+        ["P-Wing", "mario-power/p-wing", "Super Mario Bros. 3", "Lets Raccoon or Tanooki Mario fly as much as he wants for a whole level."],
+        ["Cape Feather", "mario-power/cape-feather", "Super Mario World", "Gives Mario a yellow cape so he can glide, fly and spin to knock enemies away."],
+        ["Blue Shell", "mario-power/blue-shell", "New Super Mario Bros.", "Turns Mario into Shell Mario, who can duck into his shell and slide into enemies."],
+        ["Wing Cap", "mario-power/wing-cap", "Super Mario 64", "A cap with wings that lets Mario soar through the sky. It's on the Super Mario 64 box."],
+        ["Metal Cap", "mario-power/metal-cap", "Super Mario 64", "Turns Mario into heavy, shiny Metal Mario, who can walk along the bottom of the water."],
+        ["Vanish Cap", "mario-power/vanish-cap", "Super Mario 64", "Makes Mario see-through for 20 seconds, so he can walk through enemies, metal fences and some walls."],
+        ["Mini Mushroom", "mario-power/mini-mushroom", "New Super Mario Bros.", "Shrinks Mario until he's tiny, so he can squeeze into little pipes and jump extra high."],
+        ["Mega Mushroom", "mario-power/mega-mushroom", "Power-up", "Makes Mario giant-sized, so he can stomp through enemies, blocks and pipes in his way."],
+        ["Ice Flower", "mario-power/ice-flower", "Power-up", "The icy cousin of the Fire Flower. Ice Mario throws ice balls that freeze enemies into blocks."],
+        ["Propeller Mushroom", "mario-power/propeller-mushroom", "New Super Mario Bros. Wii", "Gives Mario a propeller hat that spins him high into the air, then lets him drift slowly down."],
+        ["Penguin Suit", "mario-power/penguin-suit", "New Super Mario Bros. Wii", "A cosy penguin costume. Mario can belly-slide, swim fast and throw ice balls."],
+        ["Bee Mushroom", "mario-power/bee-mushroom", "Super Mario Galaxy", "Turns Mario into Bee Mario, who can fly for a short time and stick to honeycomb walls."],
+        ["Boo Mushroom", "mario-power/boo-mushroom", "Super Mario Galaxy", "Turns Mario into a ghost who can float in the air and spin to pass through some walls."],
+        ["Spring Mushroom", "mario-power/spring-mushroom", "Super Mario Galaxy", "Wraps Mario in a big spring. He bounces everywhere and can make super-high jumps."],
+        ["Cloud Flower", "mario-power/cloud-flower", "Super Mario Galaxy 2", "Lets Mario make up to three cloud platforms to stand on, high in the sky."],
+        ["Rock Mushroom", "mario-power/rock-mushroom", "Super Mario Galaxy 2", "Turns Mario into a rolling boulder that smashes through rocks and enemies."],
+        ["Gold Flower", "mario-power/gold-flower", "New Super Mario Bros. 2", "Turns Mario gold! His golden fireballs turn blocks into coins."],
+        ["Super Acorn", "mario-power/super-acorn", "New Super Mario Bros. U", "Turns Mario into Flying Squirrel Mario, who can glide through the air and cling to walls."],
+        ["Super Crown", "mario-power/super-crown", "New Super Mario Bros. U Deluxe", "A special crown only Toadette can use. It turns her into Peachette, who can float in the air."],
+        ["Boomerang Flower", "mario-power/boomerang-flower", "Super Mario 3D Land", "Lets Mario throw boomerangs that fly out, hit enemies and come back to him."],
+        ["Super Bell", "mario-power/super-bell", "Super Mario 3D World", "Turns Mario into Cat Mario, who can pounce on enemies, scratch, and climb up walls."],
+        ["Double Cherry", "mario-power/double-cherry", "Super Mario 3D World", "Makes a copy of you! Grab more to have a whole team of Marios running together."],
+        ["Elephant Fruit", "mario-power/elephant-fruit", "Super Mario Bros. Wonder", "Turns Mario into a big elephant who swings his trunk at enemies and sprays water."],
+        ["Bubble Flower", "mario-power/bubble-flower", "Super Mario Bros. Wonder", "Lets Mario blow bubbles that catch enemies. He can even bounce on the bubbles."],
+        ["Drill Mushroom", "mario-power/drill-mushroom", "Super Mario Bros. Wonder", "Gives Mario a drill hat so he can dig through the ground and ceilings."],
+        ["Wonder Flower", "mario-power/wonder-flower", "Super Mario Bros. Wonder", "Makes wild, surprising things happen in the level, like pipes that wiggle or Mario turning into something new."],
+        ["Poison Mushroom", "mario-power/poison-mushroom", "Power-down", "A trap that looks like a mushroom. It hurts you instead of helping, so stay away from it!"]
       ]
     },
     {
@@ -265,11 +303,14 @@
     </li>`).join("");
 
   // Sidebar: one "Comic characters" field, with a folder per game listing its characters
-  const kindLabel = { good: "Good", bad: "Bad & enemies" };
+  const kindLabel = { good: "Good", bad: "Bad & enemies", power: "Power-ups" };
+  const groupTitle = { good: "Good characters", bad: "Bad characters &amp; enemies", power: "Power-ups" };
+  const kindsOf = s => ["good", "bad", "power"].filter(k => s[k]);
+  const totalOf = s => kindsOf(s).reduce((n, k) => n + s[k].length, 0);
   document.getElementById("tree").innerHTML = sections.map((s, i) => `
     <details data-section="${s.id}" style="--accent: var(--${s.id})"${i === 0 ? " open" : ""}>
-      <summary><span class="name">${s.title}</span><span class="n">${s.good.length + s.bad.length}</span></summary>
-      ${["good", "bad"].map(kind => `
+      <summary><span class="name">${s.title}</span><span class="n">${totalOf(s)}</span></summary>
+      ${kindsOf(s).map(kind => `
         <div class="kind ${kind}" data-kind="${kind}">${kindLabel[kind]}</div>
         <ul data-kind="${kind}">${s[kind].map(([name]) =>
           `<li><a href="#${cardId(s, name)}" data-name="${esc(name.toLowerCase())}">${esc(name)}</a></li>`).join("")}</ul>`).join("")}
@@ -303,10 +344,8 @@
     <section id="${s.id}" style="--accent: var(--${s.id})">
       <h2>${s.title} <span class="count"></span></h2>
       ${s.intro ? `<p class="intro">${s.intro}</p>` : ""}
-      <h3 class="group good">Good characters <span class="count" data-kind="good"></span></h3>
-      <ul data-kind="good"></ul>
-      <h3 class="group bad">Bad characters &amp; enemies <span class="count" data-kind="bad"></span></h3>
-      <ul data-kind="bad"></ul>
+      ${kindsOf(s).map(kind => `<h3 class="group ${kind}">${groupTitle[kind]} <span class="count" data-kind="${kind}"></span></h3>
+      <ul data-kind="${kind}"></ul>`).join("")}
     </section>`).join("");
 
   function render(query) {
@@ -316,7 +355,7 @@
       const el = document.getElementById(s.id);
       const folder = tree.querySelector(`details[data-section="${s.id}"]`);
       let shown = 0;
-      for (const kind of ["good", "bad"]) {
+      for (const kind of kindsOf(s)) {
         const hits = s[kind].filter(match);
         shown += hits.length;
         el.querySelector(`.count[data-kind="${kind}"]`).textContent = hits.length + " of " + s[kind].length;
@@ -325,7 +364,7 @@
         folder.querySelectorAll(`ul[data-kind="${kind}"] a`).forEach(a => a.classList.toggle("hidden", !names.has(a.dataset.name)));
         folder.querySelector(`.kind[data-kind="${kind}"]`).classList.toggle("hidden", hits.length === 0);
       }
-      el.querySelector("h2 .count").textContent = shown + " of " + (s.good.length + s.bad.length);
+      el.querySelector("h2 .count").textContent = shown + " of " + totalOf(s);
       folder.classList.toggle("hidden", shown === 0);
       if (q && shown) folder.open = true;
     }
