@@ -7,12 +7,12 @@
 <style>
   :root {
     --bg: #f7f5f0; --card: #ffffff; --img-bg: #f1eee7; --text: #1f1d1a; --muted: #6b665e; --border: #e4dfd5;
-    --good: #15803d; --bad: #b91c1c; --power: #b45309; --img-bg-soft: #f1eee7;
+    --good: #15803d; --bad: #b91c1c; --power: #b45309; --game: #6d28d9; --img-bg-soft: #f1eee7;
     --mario: #d62828; --paw: #1d4ed8; --gd: #0f9d58; --subzero: #0284c7; --meltdown: #ea580c; --world: #a16207;
   }
   @media (prefers-color-scheme: dark) {
     :root { --bg: #16151a; --card: #211f26; --img-bg: #e9e5dc; --text: #f1eee8; --muted: #a39e94; --border: #34313b;
-            --good: #4ade80; --bad: #f87171; --power: #fbbf24; --img-bg-soft: #2b2931;
+            --good: #4ade80; --bad: #f87171; --power: #fbbf24; --game: #c4b5fd; --img-bg-soft: #2b2931;
             --mario: #f26b6b; --paw: #7aa2ff; --gd: #4fd18b; --subzero: #5cc8f5; --meltdown: #fb923c; --world: #facc15; }
   }
   * { box-sizing: border-box; }
@@ -38,6 +38,7 @@
   aside summary:hover, aside a:hover { background: var(--img-bg-soft); }
   aside .kind { margin: 8px 0 2px 26px; font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
   aside .kind.good { color: var(--good); } aside .kind.bad { color: var(--bad); } aside .kind.power { color: var(--power); }
+  aside .kind.game { color: var(--game); }
   aside ul { display: block; margin: 0 0 6px; }
   aside a { display: block; padding: 3px 8px 3px 26px; border-radius: 6px; color: var(--text);
             text-decoration: none; font-size: .9rem; }
@@ -65,6 +66,8 @@
   .intro { margin: 0 0 14px; color: var(--muted); font-size: .95rem; }
   h3.group { display: flex; align-items: baseline; gap: 8px; margin: 22px 0 10px; font-size: 1.1rem; }
   h3.group.good { color: var(--good); } h3.group.bad { color: var(--bad); } h3.group.power { color: var(--power); }
+  h3.group.game { color: var(--game); }
+  h3.group.game.first { margin-top: 36px; padding-top: 18px; border-top: 1px solid var(--border); }
   ul { list-style: none; margin: 0; padding: 0;
        display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
   li.card { background: var(--card); border: 1px solid var(--border); border-top: 4px solid var(--accent);
@@ -75,7 +78,7 @@
   .body h4 { margin: 0 0 4px; font-size: 1.1rem; }
   .tag { display: inline-block; font-size: .75rem; font-weight: 600; padding: 2px 8px; border-radius: 999px;
          border: 1px solid currentColor; margin-bottom: 8px; }
-  .good .tag { color: var(--good); } .bad .tag { color: var(--bad); } .power .tag { color: var(--power); }
+  .good .tag { color: var(--good); } .bad .tag { color: var(--bad); } .power .tag { color: var(--power); } .game .tag { color: var(--game); }
   .body p { margin: 0; font-size: .92rem; color: var(--muted); }
   .empty { color: var(--muted); font-style: italic; }
   footer { margin-top: 48px; font-size: .8rem; color: var(--muted); }
@@ -90,7 +93,7 @@
 <main>
   <button class="menu-btn" id="menu-btn" aria-controls="sidebar" aria-expanded="false">☰ Comic characters</button>
   <h1>Atharv's Favourite Characters</h1>
-  <p class="sub">The good guys, the bad guys and the power-ups from Super Mario, PAW Patrol and Geometry Dash, and what each of them does.</p>
+  <p class="sub">The good guys, the bad guys and the power-ups from Super Mario, PAW Patrol and Geometry Dash, what each of them does, and every big Mario game.</p>
   <input type="search" id="q" placeholder="Search characters…" aria-label="Search characters">
   <div id="sections"></div>
   <footer>Character images come from the Super Mario Wiki, the PAW Patrol Wiki and the Geometry Dash Wiki. All characters belong to their owners (Nintendo, Spin Master and RobTop Games).</footer>
@@ -178,6 +181,101 @@
         ["Drill Mushroom", "mario-power/drill-mushroom", "Super Mario Bros. Wonder", "Gives Mario a drill hat so he can dig through the ground and ceilings."],
         ["Wonder Flower", "mario-power/wonder-flower", "Super Mario Bros. Wonder", "Makes wild, surprising things happen in the level, like pipes that wiggle or Mario turning into something new."],
         ["Poison Mushroom", "mario-power/poison-mushroom", "Power-down", "A trap that looks like a mushroom. It hurts you instead of helping, so stay away from it!"]
+      ],
+      gmain: [
+        ["Donkey Kong", "mario-games/donkey-kong", "1981 · Arcade", "The game where Mario first appeared! Back then he was called Jumpman, and he had to jump over barrels to save Pauline from Donkey Kong."],
+        ["Mario Bros.", "mario-games/mario-bros", "1983 · Arcade", "Mario and Luigi work as plumbers in the sewers, bumping pipes from below to flip over Shellcreepers and Sidesteppers."],
+        ["Super Mario Bros.", "mario-games/super-mario-bros", "1985 · NES", "The famous adventure that started it all. Mario runs and jumps through eight worlds to rescue Princess Toadstool from Bowser."],
+        ["Super Mario Bros.: The Lost Levels", "mario-games/super-mario-bros-the-lost-levels", "1986 · Famicom Disk System", "The super-hard sequel from Japan, full of tricky jumps and poison mushrooms. Luigi can jump higher but slides more."],
+        ["Super Mario Bros. 2", "mario-games/super-mario-bros-2", "1988 · NES", "A dream adventure in Subcon. Mario, Luigi, Toad and Peach pull up vegetables and throw them at Shy Guys and Wart."],
+        ["Super Mario Bros. 3", "mario-games/super-mario-bros-3", "1988 · NES", "Bowser's Koopalings have stolen the kings' magic wands! It brought the world map, the Super Leaf and the Tanooki Suit."],
+        ["Super Mario Land", "mario-games/super-mario-land", "1989 · Game Boy", "Mario's first handheld adventure. He travels through Sarasaland to rescue Princess Daisy, even flying a plane and driving a submarine."],
+        ["Super Mario World", "mario-games/super-mario-world", "1990 · SNES", "Mario and Luigi visit Dinosaur Land and meet Yoshi for the first time. Mario can fly with the Cape Feather."],
+        ["Super Mario Land 2: 6 Golden Coins", "mario-games/super-mario-land-2-6-golden-coins", "1992 · Game Boy", "Wario takes over Mario's castle! Mario collects six golden coins to get it back. This is the game where Wario first appeared."],
+        ["Super Mario World 2: Yoshi's Island", "mario-games/super-mario-world-2-yoshis-island", "1995 · SNES", "The Yoshis carry Baby Mario across the island to find Baby Luigi, who was kidnapped by Kamek. It looks like a crayon drawing."],
+        ["Super Mario 64", "mario-games/super-mario-64", "1996 · Nintendo 64", "Mario's first 3D adventure. He jumps into paintings in Peach's Castle to collect Power Stars and stop Bowser."],
+        ["Super Mario Sunshine", "mario-games/super-mario-sunshine", "2002 · GameCube", "Mario goes on holiday to Isle Delfino and uses F.L.U.D.D., a water pack, to clean up the goop left by Shadow Mario."],
+        ["New Super Mario Bros.", "mario-games/new-super-mario-bros", "2006 · Nintendo DS", "Mario's classic side-scrolling running and jumping comes back, with new power-ups like the Mega Mushroom and Mini Mushroom."],
+        ["Super Mario Galaxy", "mario-games/super-mario-galaxy", "2007 · Wii", "Mario blasts into outer space! He runs around tiny planets, meets Rosalina and the Lumas, and collects Power Stars."],
+        ["New Super Mario Bros. Wii", "mario-games/new-super-mario-bros-wii", "2009 · Wii", "Up to four players can play at the same time as Mario, Luigi and two Toads. It added the Propeller Mushroom and Penguin Suit."],
+        ["Super Mario Galaxy 2", "mario-games/super-mario-galaxy-2", "2010 · Wii", "More space adventures, and this time Mario can ride Yoshi among the stars. It has the Cloud Flower and Rock Mushroom."],
+        ["Super Mario 3D Land", "mario-games/super-mario-3d-land", "2011 · Nintendo 3DS", "A 3D Mario game that plays like the classic 2D ones. Tanooki Mario is back, and the levels pop out in 3D."],
+        ["New Super Mario Bros. 2", "mario-games/new-super-mario-bros-2", "2012 · Nintendo 3DS", "A game all about coins! With the Gold Flower, players try to collect one million coins."],
+        ["New Super Mario Bros. U", "mario-games/new-super-mario-bros-u", "2012 · Wii U", "Bowser takes over Peach's Castle and throws Mario far away. Mario can glide with the Super Acorn."],
+        ["Super Mario 3D World", "mario-games/super-mario-3d-world", "2013 · Wii U", "Mario, Luigi, Peach and Toad visit the Sprixie Kingdom. The Super Bell turns them into cats who can climb walls."],
+        ["Captain Toad: Treasure Tracker", "mario-games/captain-toad-treasure-tracker", "2014 · Wii U", "Captain Toad and Toadette explore little puzzle levels shaped like boxes. Captain Toad can't jump, so you have to think!"],
+        ["Super Mario Maker", "mario-games/super-mario-maker", "2015 · Wii U", "Build your own Mario levels and share them with players around the world."],
+        ["Super Mario Run", "mario-games/super-mario-run", "2016 · Mobile", "A Mario game for phones. Mario runs by himself, and you tap the screen to make him jump."],
+        ["Super Mario Odyssey", "mario-games/super-mario-odyssey", "2017 · Nintendo Switch", "Mario travels around the world on the Odyssey ship with his hat friend Cappy, who lets him take over enemies and objects."],
+        ["Super Mario Maker 2", "mario-games/super-mario-maker-2", "2019 · Nintendo Switch", "Make even more Mario levels, with slopes, new enemies and a Story Mode for helping rebuild Peach's Castle."],
+        ["Super Mario 3D World + Bowser's Fury", "mario-games/super-mario-3d-world-bowsers-fury", "2021 · Nintendo Switch", "Super Mario 3D World on Switch, plus a brand-new adventure where Mario and Bowser Jr. face a giant Fury Bowser."],
+        ["Super Mario Bros. Wonder", "mario-games/super-mario-bros-wonder", "2023 · Nintendo Switch", "Mario visits the Flower Kingdom, where Wonder Flowers make amazing things happen and Elephant Mario stomps around."]
+      ],
+      gkart: [
+        ["Super Mario Kart", "mario-games/super-mario-kart", "1992 · SNES", "The very first Mario Kart! Mario and friends race go-karts and throw shells and bananas at each other."],
+        ["Mario Kart 64", "mario-games/mario-kart-64", "1996 · Nintendo 64", "Four players can race at once on tracks like Rainbow Road. This is where the spiky Blue Shell first appeared."],
+        ["Mario Kart: Super Circuit", "mario-games/mario-kart-super-circuit", "2001 · Game Boy Advance", "The first Mario Kart you could take anywhere, with all the tracks from Super Mario Kart as well."],
+        ["Mario Kart: Double Dash!!", "mario-games/mario-kart-double-dash", "2003 · GameCube", "Two characters share each kart: one drives and the other throws items. Each pair has its own special item."],
+        ["Mario Kart DS", "mario-games/mario-kart-ds", "2005 · Nintendo DS", "Mario Kart on the DS, and the first one you could play online with friends around the world."],
+        ["Mario Kart Wii", "mario-games/mario-kart-wii", "2008 · Wii", "Hold the Wii Wheel like a steering wheel! This one added motorbikes and doing tricks off ramps."],
+        ["Mario Kart 7", "mario-games/mario-kart-7", "2011 · Nintendo 3DS", "Karts get gliders for flying and propellers for driving underwater. You can build your own kart from parts."],
+        ["Mario Kart 8", "mario-games/mario-kart-8", "2014 · Wii U", "Karts drive upside down on anti-gravity tracks that twist up walls and across ceilings."],
+        ["Mario Kart 8 Deluxe", "mario-games/mario-kart-8-deluxe", "2017 · Nintendo Switch", "Mario Kart 8 on Switch with even more characters, a Battle Mode and lots of extra tracks to download."],
+        ["Mario Kart Tour", "mario-games/mario-kart-tour", "2019 · Mobile", "Mario Kart for phones, with tracks themed after real cities like New York, Paris and Tokyo."],
+        ["Mario Kart Live: Home Circuit", "mario-games/mario-kart-live-home-circuit", "2020 · Nintendo Switch", "A real remote-control kart with a camera! You build a race track in your own home and watch it on the Switch."],
+        ["Mario Kart World", "mario-games/mario-kart-world", "2025 · Nintendo Switch 2", "A huge connected world to drive around, with 24 racers in every race and a Knockout Tour mode."]
+      ],
+      gparty: [
+        ["Mario Party", "mario-games/mario-party", "1998 · Nintendo 64", "The first Mario Party! Players roll dice, move around a board game and play minigames to win the most stars."],
+        ["Mario Party 2", "mario-games/mario-party-2", "1999 · Nintendo 64", "Mario and friends dress up in costumes to match each board's theme, like pirates and cowboys."],
+        ["Mario Party 3", "mario-games/mario-party-3", "2000 · Nintendo 64", "Players fight over the Star Rod in a Millennium Star story. Daisy and Waluigi joined as players for the first time."],
+        ["Mario Party 4", "mario-games/mario-party-4", "2002 · GameCube", "The first Mario Party on GameCube. Mini Mushrooms and Mega Mushrooms change how far you move."],
+        ["Mario Party 5", "mario-games/mario-party-5", "2003 · GameCube", "The party is held in the Dream Depot, with Capsules you can throw on the board. Toad, Boo and Koopa Kid became players for the first time."],
+        ["Mario Party 6", "mario-games/mario-party-6", "2004 · GameCube", "The boards change from day to night, and you could use a microphone to play some minigames."],
+        ["Mario Party 7", "mario-games/mario-party-7", "2005 · GameCube", "Toadsworth takes everyone on a cruise around the world. Up to eight players can play together."],
+        ["Mario Party 8", "mario-games/mario-party-8", "2007 · Wii", "The party happens at Star Carnival, and you shake and point the Wii Remote to play."],
+        ["Mario Party 9", "mario-games/mario-party-9", "2012 · Wii", "Everyone rides in the same vehicle around the board and collects Mini Stars together."],
+        ["Mario Party 10", "mario-games/mario-party-10", "2015 · Wii U", "One player can be Bowser and chase everyone else around the board. It also works with amiibo figures."],
+        ["Super Mario Party", "mario-games/super-mario-party", "2018 · Nintendo Switch", "Each character has their own special dice block, and you can make Ally friends join your team."],
+        ["Mario Party Superstars", "mario-games/mario-party-superstars", "2021 · Nintendo Switch", "The best boards from the Nintendo 64 games and 100 favourite minigames, all updated."],
+        ["Super Mario Party Jamboree", "mario-games/super-mario-party-jamboree", "2024 · Nintendo Switch", "The biggest Mario Party, with more than 110 minigames, new boards, and Jamboree Buddies who help you win."]
+      ],
+      grpg: [
+        ["Super Mario RPG: Legend of the Seven Stars", "mario-games/super-mario-rpg-legend-of-the-seven-stars", "1996 · SNES", "Mario's first role-playing game. He teams up with Mallow, Geno and even Bowser to fight the Smithy Gang."],
+        ["Paper Mario", "mario-games/paper-mario", "2000 · Nintendo 64", "Everything looks like paper! Mario rescues the seven Star Spirits with help from partners like Goombario."],
+        ["Mario & Luigi: Superstar Saga", "mario-games/mario-luigi-superstar-saga", "2003 · Game Boy Advance", "Mario and Luigi travel to the Beanbean Kingdom and use special Bros. moves together in battle."],
+        ["Paper Mario: The Thousand-Year Door", "mario-games/paper-mario-the-thousand-year-door", "2004 · GameCube", "Paper Mario hunts for Crystal Stars to find the treasure behind the Thousand-Year Door. It was remade for Switch in 2024."],
+        ["Mario & Luigi: Partners in Time", "mario-games/mario-luigi-partners-in-time", "2005 · Nintendo DS", "Mario and Luigi travel back in time and team up with Baby Mario and Baby Luigi."],
+        ["Super Paper Mario", "mario-games/super-paper-mario", "2007 · Wii", "Mario can flip from 2D to 3D to find hidden paths. Peach, Bowser and Luigi join the team."],
+        ["Mario & Luigi: Bowser's Inside Story", "mario-games/mario-luigi-bowsers-inside-story", "2009 · Nintendo DS", "Bowser accidentally swallows Mario and Luigi! The brothers explore inside Bowser's body."],
+        ["Paper Mario: Sticker Star", "mario-games/paper-mario-sticker-star", "2012 · Nintendo 3DS", "Mario collects stickers and uses them to attack in battle, all to find the six Royal Stickers."],
+        ["Mario & Luigi: Dream Team", "mario-games/mario-luigi-dream-team", "2013 · Nintendo 3DS", "Mario jumps into Luigi's dreams on Pi'illo Island, where lots of Luigis help in battle."],
+        ["Mario & Luigi: Paper Jam", "mario-games/mario-luigi-paper-jam", "2015 · Nintendo 3DS", "The Paper Mario world spills out of a book, so Mario, Luigi and Paper Mario all team up."],
+        ["Paper Mario: Color Splash", "mario-games/paper-mario-color-splash", "2016 · Wii U", "Mario uses a paint hammer to put colour back into Prism Island, with help from Huey the paint can."],
+        ["Paper Mario: The Origami King", "mario-games/paper-mario-the-origami-king", "2020 · Nintendo Switch", "King Olly folds Peach's Castle into origami! Mario and Olivia must unwrap the streamers around it."],
+        ["Super Mario RPG", "mario-games/super-mario-rpg-switch", "2023 · Nintendo Switch", "A brand-new remake of the 1996 adventure, with updated 3D graphics and new team attacks."],
+        ["Mario & Luigi: Brothership", "mario-games/mario-luigi-brothership", "2024 · Nintendo Switch", "Mario and Luigi sail on an island ship around Concordia to connect the islands back together."]
+      ],
+      gsport: [
+        ["Mario Golf", "mario-games/mario-golf", "1999 · Nintendo 64", "Mario and friends play golf on fun courses. It was the first Mario Golf game made by Camelot."],
+        ["Mario Tennis", "mario-games/mario-tennis", "2000 · Nintendo 64", "Mario's crew play tennis. This game is where Waluigi first appeared!"],
+        ["Super Mario Strikers", "mario-games/super-mario-strikers", "2005 · GameCube", "Wild football matches with no rules, where players tackle, use items and shoot super strikes."],
+        ["Mario Superstar Baseball", "mario-games/mario-superstar-baseball", "2005 · GameCube", "Mario's friends play baseball, each with their own special star swings and pitches."],
+        ["Mario Hoops 3-on-3", "mario-games/mario-hoops-3-on-3", "2006 · Nintendo DS", "Teams of three play basketball, dribbling with the touch screen and collecting coins."],
+        ["Mario & Sonic at the Olympic Games", "mario-games/mario-sonic-at-the-olympic-games", "2007 · Wii", "Mario and Sonic the Hedgehog meet for the first time to compete in Olympic events like running and swimming."],
+        ["Mario Tennis Aces", "mario-games/mario-tennis-aces", "2018 · Nintendo Switch", "Tennis with special moves, like slowing down time with Zone Speed and smashing Trick Shots."],
+        ["Mario Golf: Super Rush", "mario-games/mario-golf-super-rush", "2021 · Nintendo Switch", "Golf with a twist: in Speed Golf, everyone runs to their ball at the same time."],
+        ["Mario Strikers: Battle League", "mario-games/mario-strikers-battle-league", "2022 · Nintendo Switch", "Five-a-side football with Hyper Strikes, electric fences and gear that changes your powers."]
+      ],
+      gmore: [
+        ["Dr. Mario", "mario-games/dr-mario", "1990 · NES", "Mario puts on a doctor's coat and drops coloured pills to zap the viruses in a puzzle game."],
+        ["Mario Paint", "mario-games/mario-paint", "1992 · SNES", "Draw pictures, make music and create animations with the Super NES Mouse. You can even swat flies!"],
+        ["Luigi's Mansion", "mario-games/luigis-mansion", "2001 · GameCube", "Luigi has won a spooky mansion, but Mario is missing! Luigi sucks up ghosts with the Poltergust 3000 to save him."],
+        ["Mario vs. Donkey Kong", "mario-games/mario-vs-donkey-kong", "2004 · Game Boy Advance", "Donkey Kong steals all the Mini Mario toys! Mario solves puzzle levels to get them back. It was remade for Switch in 2024."],
+        ["Super Princess Peach", "mario-games/super-princess-peach", "2005 · Nintendo DS", "This time Peach saves Mario! She uses her magic umbrella, Perry, and her feelings to get past enemies."],
+        ["Luigi's Mansion: Dark Moon", "mario-games/luigis-mansion-dark-moon", "2013 · Nintendo 3DS", "Luigi explores five haunted mansions to find the pieces of the Dark Moon, with help from Professor E. Gadd."],
+        ["Luigi's Mansion 3", "mario-games/luigis-mansion-3", "2019 · Nintendo Switch", "Luigi visits a haunted hotel and teams up with Gooigi, his gooey green twin, to rescue his friends."],
+        ["Princess Peach: Showtime!", "mario-games/princess-peach-showtime", "2024 · Nintendo Switch", "Peach visits the Sparkle Theater and transforms into heroes like a swordfighter, a detective and a ninja."]
       ]
     },
     {
@@ -292,7 +390,7 @@
   const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
   const cardId = (s, name) => s.id + "-" + name.toLowerCase().replace(/'/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
   const cards = (s, list, kind) => list.map(([name, img, role, desc]) => `
-    <li class="card ${kind}" id="${cardId(s, name)}">
+    <li class="card ${kindClass(kind)}" id="${cardId(s, name)}">
       <div class="pic"><img src="images/${img}.png" alt="${esc(name)}" loading="lazy"></div>
       <div class="body">
         <h4>${esc(name)}</h4>
@@ -302,15 +400,21 @@
     </li>`).join("");
 
   // Sidebar: one "Comic characters" field, with a folder per game listing its characters
-  const kindLabel = { good: "Good", bad: "Bad & enemies", power: "Power-ups" };
-  const groupTitle = { good: "Good characters", bad: "Bad characters &amp; enemies", power: "Power-ups" };
-  const kindsOf = s => ["good", "bad", "power"].filter(k => s[k]);
+  const kindLabel = { good: "Good", bad: "Bad & enemies", power: "Power-ups", gmain: "Games: Super Mario", gkart: "Games: Mario Kart",
+                      gparty: "Games: Mario Party", grpg: "Games: RPG adventures", gsport: "Games: Sports", gmore: "Games: More" };
+  const groupTitle = { good: "Good characters", bad: "Bad characters &amp; enemies", power: "Power-ups", gmain: "Games · Super Mario adventures",
+                      gkart: "Games · Mario Kart", gparty: "Games · Mario Party", grpg: "Games · Role-playing adventures",
+                      gsport: "Games · Sports", gmore: "Games · More Mario games" };
+  // Game groups all share the "game" colour
+  const gameKinds = ["gmain", "gkart", "gparty", "grpg", "gsport", "gmore"];
+  const kindClass = k => gameKinds.includes(k) ? "game" : k;
+  const kindsOf = s => ["good", "bad", "power", ...gameKinds].filter(k => s[k]);
   const totalOf = s => kindsOf(s).reduce((n, k) => n + s[k].length, 0);
   document.getElementById("tree").innerHTML = sections.map((s, i) => `
     <details data-section="${s.id}" style="--accent: var(--${s.id})"${i === 0 ? " open" : ""}>
       <summary><span class="name">${s.title}</span><span class="n">${totalOf(s)}</span></summary>
       ${kindsOf(s).map(kind => `
-        <div class="kind ${kind}" data-kind="${kind}">${kindLabel[kind]}</div>
+        <div class="kind ${kindClass(kind)}" data-kind="${kind}">${kindLabel[kind]}</div>
         <ul data-kind="${kind}">${s[kind].map(([name]) =>
           `<li><a href="#${cardId(s, name)}" data-name="${esc(name.toLowerCase())}">${esc(name)}</a></li>`).join("")}</ul>`).join("")}
     </details>`).join("");
@@ -343,7 +447,7 @@
     <section id="${s.id}" style="--accent: var(--${s.id})">
       <h2>${s.title} <span class="count"></span></h2>
       ${s.intro ? `<p class="intro">${s.intro}</p>` : ""}
-      ${kindsOf(s).map(kind => `<h3 class="group ${kind}">${groupTitle[kind]} <span class="count" data-kind="${kind}"></span></h3>
+      ${kindsOf(s).map((kind, i, ks) => `<h3 class="group ${kindClass(kind)}${gameKinds.includes(kind) && !gameKinds.includes(ks[i - 1]) ? " first" : ""}">${groupTitle[kind]} <span class="count" data-kind="${kind}"></span></h3>
       <ul data-kind="${kind}"></ul>`).join("")}
     </section>`).join("");
 
