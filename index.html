@@ -43,6 +43,10 @@
   aside a { display: block; padding: 3px 8px 3px 26px; border-radius: 6px; color: var(--text);
             text-decoration: none; font-size: .9rem; }
   aside a.hidden, aside .kind.hidden, aside details.hidden { display: none; }
+  aside a.field { display: flex; align-items: center; gap: 6px; margin: 18px 0 8px; padding: 6px 8px; font-size: .78rem; }
+  aside a.field:first-child { margin-top: 0; }
+  aside a.field.on { color: var(--text); background: var(--img-bg-soft); }
+  aside .field-links a.on { background: var(--img-bg-soft); font-weight: 600; }
 
   .menu-btn { display: none; }
   li.card.flash { outline: 3px solid var(--accent); outline-offset: 2px; }
@@ -83,20 +87,33 @@
   .empty { color: var(--muted); font-style: italic; }
   footer { margin-top: 48px; font-size: .8rem; color: var(--muted); }
 </style>
+<link rel="stylesheet" href="kids.css">
 </head>
 <body>
 <div class="layout">
-<aside id="sidebar" aria-label="Characters">
-  <span class="field">Comic characters</span>
+<aside id="sidebar" aria-label="Site sections">
+  <a class="field" href="#characters" data-view="characters">🦸 Comic characters</a>
   <div id="tree"></div>
+  <a class="field" href="#games" data-view="games">🎮 Games</a>
+  <div class="field-links">
+    <a href="#games/puzzle" data-game="puzzle">🧩 Picture puzzle</a>
+    <a href="#games/memory" data-game="memory">🃏 Memory game</a>
+    <a href="#games/wordsearch" data-game="wordsearch">🔤 Word search</a>
+    <a href="#games/numbers" data-game="numbers">➕ Numbers</a>
+  </div>
+  <a class="field" href="#travel" data-view="travel">✈️ Travel blog</a>
 </aside>
 <main>
-  <button class="menu-btn" id="menu-btn" aria-controls="sidebar" aria-expanded="false">☰ Comic characters</button>
+  <button class="menu-btn" id="menu-btn" aria-controls="sidebar" aria-expanded="false">☰ Menu</button>
+  <div class="view" id="view-characters">
   <h1>Atharv's Favourite Characters</h1>
   <p class="sub">The good guys, the bad guys and the power-ups from Super Mario, PAW Patrol and Geometry Dash, what each of them does, and every big Mario game.</p>
   <input type="search" id="q" placeholder="Search characters…" aria-label="Search characters">
   <div id="sections"></div>
   <footer>Character images come from the Super Mario Wiki, the PAW Patrol Wiki and the Geometry Dash Wiki. All characters belong to their owners (Nintendo, Spin Master and RobTop Games).</footer>
+  </div>
+  <div class="view" id="view-games" hidden></div>
+  <div class="view" id="view-travel" hidden></div>
 </main>
 </div>
 
@@ -411,7 +428,7 @@
   const kindsOf = s => ["good", "bad", "power", ...gameKinds].filter(k => s[k]);
   const totalOf = s => kindsOf(s).reduce((n, k) => n + s[k].length, 0);
   document.getElementById("tree").innerHTML = sections.map((s, i) => `
-    <details data-section="${s.id}" style="--accent: var(--${s.id})"${i === 0 ? " open" : ""}>
+    <details data-section="${s.id}" style="--accent: var(--${s.id})">
       <summary><span class="name">${s.title}</span><span class="n">${totalOf(s)}</span></summary>
       ${kindsOf(s).map(kind => `
         <div class="kind ${kindClass(kind)}" data-kind="${kind}">${kindLabel[kind]}</div>
@@ -424,6 +441,7 @@
     const a = e.target.closest("a");
     if (!a) return;
     e.preventDefault();
+    window.showView?.("characters");
     const card = document.querySelector(a.getAttribute("href"));
     if (!card) return;
     card.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -476,5 +494,6 @@
   document.getElementById("q").addEventListener("input", e => render(e.target.value));
   render("");
 </script>
+<script src="kids.js"></script>
 </body>
 </html>
